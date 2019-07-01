@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--使用注解开发引入Context约束 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--开启Spring的组件扫描 （哪些包下使用IOC注解）-->
+
+    <context:component-scan base-package="com.xianzhi945.learning.dao.impl"></context:component-scan>
+    <context:component-scan base-package="SpringAopLearning.impl"></context:component-scan>
+    <context:component-scan base-package="service.impl"></context:component-scan>
+
+    <context:component-scan base-package="OtherAnnotation"></context:component-scan>
+    <bean id="myAspect" class="SpringAopLearning.MyAspect"/>
+    <aop:config>
+        <!-- expression表达式配置哪些类的哪些方法需要增强-->
+        <aop:pointcut id="PointCut1" expression="execution(* SpringAopLearning.impl.ProductDaoImpl.save(..))"/>
+        <aop:pointcut id="PointCut2" expression="execution(* SpringAopLearning.impl.ProductDaoImpl.delete(..))"/>
+        <aop:pointcut id="PointCut3" expression="execution(* SpringAopLearning.impl.ProductDaoImpl.update(..))"/>
+        <aop:pointcut id="PointCut4" expression="execution(* SpringAopLearning.impl.ProductDaoImpl.find(..))"/>
+        <!--配置切面 -->
+        <aop:aspect ref="myAspect">
+            <!--前置通知 -->
+            <aop:before method="checkPri" pointcut-ref="PointCut1"/>
+            <!--后置通知 -->
+            <aop:after-returning method="writeLog" pointcut-ref="PointCut2"  returning="result"/>
+            <!--环绕通知 -->
+            <aop:around method="around" pointcut-ref="PointCut3"/>
+            <!--异常抛出通知 -->
+            <aop:after-throwing method="afterThrowing" pointcut-ref="PointCut4" throwing="tx"/>
+            <!--最终通知 -->
+            <aop:after method="after" pointcut-ref="PointCut4"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

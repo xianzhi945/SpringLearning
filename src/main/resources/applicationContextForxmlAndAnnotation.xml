@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--使用注解开发引入Context约束 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--开启Spring的组件扫描 （哪些包下使用IOC注解）-->
+<!-- 扫描是为了扫描类上的方法 -->
+  <!--  <context:component-scan base-package="com.xianzhi945.learning.dao.impl"></context:component-scan> -->
+
+    <!-- 在没有扫描的情况下，使用属性注入的注解-->
+    <context:annotation-config></context:annotation-config>
+    <bean id="userDao" class="xmlAnnotation.userDAO"/>
+    <bean id="orderDao" class="xmlAnnotation.orderDAO"/>
+    <bean id="orderService" class="xmlAnnotation.orderService"/>
+</beans>
